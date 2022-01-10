@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Region;
 
-use App\Http\Controllers\Controller;
 use App\Models\Region;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Services\SlugGenerator;
+use App\Http\Requests\RegionStoreRequest;
+use App\Http\Requests\RegionUpdateRequest;
 
 class RegionController extends Controller
 {
@@ -15,8 +18,7 @@ class RegionController extends Controller
      */
     public function index()
     {
-        $regions = Region::orderByDesc('id')->get();
-        $regions = collect([1, 2]);
+        $regions = Region::orderByDesc('id')->paginate();
         return view('admin.regions.index', compact("regions"));
     }
 
@@ -33,12 +35,26 @@ class RegionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\RegionStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RegionStoreRequest $request)
     {
-        //
+        if(!$request->validated())
+            return redirect()->back()->with('danger_message', 'Не удалось добавить область');
+        $translations = [
+            'uz' => $request->validated()['title_uz'],
+            'oz' => $request->validated()['title_oz'],
+            'en' => $request->validated()['title_en'],
+            'ru' => $request->validated()['title_ru']
+        ];
+        $region = new Region;
+        $region->slug = $request->slug;
+        $region->setTranslations('title', $translations);
+        if(!$region->save())        
+            return redirect()->back()->with('danger_message', 'Не удалось добавить область');
+
+        return redirect()->route('admin.viloyats.index')->with('success_message', "Область " . $region->title . " успешно добавлена!" );
     }
 
     /**
@@ -49,7 +65,7 @@ class RegionController extends Controller
      */
     public function show(Region $region)
     {
-        //
+        return $region;
     }
 
     /**
@@ -66,13 +82,26 @@ class RegionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Request\RegionUpdateRequest  $request
      * @param  \App\Models\Region  $region
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Region $region)
+    public function update(RegionUpdateRequest $request, Region $region)
     {
-        //
+        if(!$request->validated())
+            return redirect()->back()->with('danger_message', 'Не удалось обновить область');
+        $translations = [
+            'uz' => $request->validated()['title_uz'],
+            'oz' => $request->validated()['title_oz'],
+            'en' => $request->validated()['title_en'],
+            'ru' => $request->validated()['title_ru']
+        ];
+        $region->slug = $request->slug;
+        $region->setTranslations('title', $translations);
+        if(!$region->save())        
+            return redirect()->back()->with('danger_message', 'Не удалось обновить область');
+
+        return redirect()->route('admin.viloyats.index')->with('success_message', "Область " . $region->title . " успешно обновлена!" );
     }
 
     /**
@@ -83,6 +112,20 @@ class RegionController extends Controller
      */
     public function destroy(Region $region)
     {
-        //
+        if(!$region->delete()) 
+            return redirect()->back()->with('danger_message', 'Не удалось удалить область');
+        
+        return redirect()->back()->with('success_message', "$region->title удалена");
+    }
+
+
+    /**
+     * Checks if specified slug is valid
+     * 
+     */
+    public function checkSlug(Region $region = null)
+    {
+        $slugToCheck = request('slug') ?? abort(401);
+        return ['isUnique' => SlugGenerator::checkRegion($slugToCheck, $region === null, $region)];
     }
 }

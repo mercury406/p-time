@@ -17,10 +17,7 @@ class CreateCitiesTable extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('slug')->unique();
-            $table->string('title_uz');
-            $table->string('title_en');
-            $table->string('title_oz');
-            $table->string('title_ru');
+            $table->json('title');
             $table->foreignIdFor(Region::class)->constrained();
             $table->timestamps();
         });

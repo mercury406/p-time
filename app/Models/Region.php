@@ -3,21 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Translatable\HasTranslations;
+
 
 class Region extends Model
 {
     use HasFactory;
-    use Sluggable;
+    use HasTranslations;
+    
+    protected $fillable = ['slug', 'title'];
+    public $translatable = ['title'];
 
-    public function sluggable(): array
-    {
-        return [
-            'slug' => [
-                'source' => 'title_uz',
-                'separator' => ''
-            ]
-        ];
-    }
 }
