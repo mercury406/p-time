@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\City;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegionUpdateRequest extends FormRequest
+class CityUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +27,9 @@ class RegionUpdateRequest extends FormRequest
         return [
             'slug' => [
                 'required',
-                Rule::unique('regions')->ignore($this->region_id)
+                Rule::unique('cities')->ignore($this->city_id)
             ],
+            'region_id' => ['required', 'numeric', 'exists:regions,id'],
             'title_uz' => "required",
             'title_oz' => "required",
             'title_en' => "required",

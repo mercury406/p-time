@@ -1,22 +1,60 @@
 @extends('admin.layouts.main')
-@section('title', 'Список городов')
+@section('title', $region->translate('title', 'ru'))
 @section('content')
-    <a href="{{ route('admin.shahars.create') }}" class="btn btn-sm btn-primary mb-1">Добавить город</a>
+
+    <div class="row">
+        <div class="col-12">
+            <a href="{{ route('viloyats.show', $region) }}">{{ route('viloyats.show', $region) }}</a>
+        </div>
+    </div>
+
+    <h3>Подробности</h3>
+
+    <table class="table table-hover table-sm">
+        <tr>
+            <td><strong>Название на узбекском(латиница)</strong></td>
+            <td>{{ $region->translate('title', 'uz') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Название на узбекском(кириллица)</strong></td>
+            <td>{{ $region->translate('title', 'oz') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Название на английском</strong></td>
+            <td>{{ $region->translate('title', 'en') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Название на русском</strong></td>
+            <td>{{ $region->translate('title', 'ru') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Добавлен</strong></td>
+            <td>{{ $region->created_at->format('d-m-Y, H:i:s') }}</td>
+        </tr>
+        <tr>
+            <td><strong>Последнее изменение</strong></td>
+            <td>{{ $region->updated_at->format('d-m-Y, H:i:s') }}</td>
+        </tr>
+    </table>
+
+    <h3>Города ({{ $region->cities->count() }})</h3>
+
+    
     <table class="table table-hover table-sm table-responsive">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Город (Вилоят)</th>
+                <th scope="col">Город</th>
                 <th scope="col">Ссылка на сайт</th>
                 <th scope="col">Добавлен(Изменен)</th>
                 <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($cities as $city)
+            @forelse ($region->cities as $city)
                 <tr>
                     <td scope="row">{{$city->id}}</td>
-                    <td>{{$city->translate('title', 'uz')}} (<a href="{{route('admin.viloyats.show', $city->region)}}">{{$city->region->translate('title', 'uz')}}</a>)</td>
+                    <td>{{$city->translate('title', 'ru')}}</td>
                     <td><a href="{{ route('shahars.show', $city) }}">{{ route('shahars.show', $city) }}</a></td>
                     <td>{{ $city->created_at->format('d-m-Y')}} ({{$city->updated_at->format('d-m-Y')}})</td>
                     <td>
@@ -37,7 +75,4 @@
         </tbody>
     </table>
 
-    @if ($cities->count() > 0)
-        {{ $cities->links() }}
-    @endif
 @endsection

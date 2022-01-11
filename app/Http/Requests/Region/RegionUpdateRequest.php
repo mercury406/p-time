@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Request\Region;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegionStoreRequest extends FormRequest
+class RegionUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +25,10 @@ class RegionStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'slug' => 'required',
+            'slug' => [
+                'required',
+                Rule::unique('regions')->ignore($this->region_id)
+            ],
             'title_uz' => "required",
             'title_oz' => "required",
             'title_en' => "required",

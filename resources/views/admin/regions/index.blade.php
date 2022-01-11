@@ -6,7 +6,7 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Вилоят</th>
+                <th scope="col">Вилоят (количество городов)</th>
                 <th scope="col">Ссылка на сайт</th>
                 <th scope="col">Добавлен(Изменен)</th>
                 <th scope="col">Действия</th>
@@ -16,7 +16,7 @@
             @forelse ($regions as $region)
                 <tr>
                     <td scope="row">{{ $region->id }}</td>
-                    <td>{{ $region->getTranslation('title', 'uz') }}</td>
+                    <td>{{ $region->getTranslation('title', 'uz') }} ({{$region->cities->count()}})</td>
                     <td><a
                             href="{{ route('viloyats.show', $region) }}">{{ route('viloyats.show', $region) }}</a>
                     </td>

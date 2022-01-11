@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin\Region;
 
 use App\Models\Region;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Services\SlugGenerator;
-use App\Http\Requests\RegionStoreRequest;
-use App\Http\Requests\RegionUpdateRequest;
+use App\Http\Request\Region\RegionStoreRequest;
+use App\Http\Request\Region\RegionUpdateRequest;
+
 
 class RegionController extends Controller
 {
@@ -35,7 +35,7 @@ class RegionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\RegionStoreRequest  $request
+     * @param  \App\Http\Requests\Region\RegionStoreRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(RegionStoreRequest $request)
@@ -49,7 +49,7 @@ class RegionController extends Controller
             'ru' => $request->validated()['title_ru']
         ];
         $region = new Region;
-        $region->slug = $request->slug;
+        $region->slug = $request->validated()['slug'];
         $region->setTranslations('title', $translations);
         if(!$region->save())        
             return redirect()->back()->with('danger_message', 'Не удалось добавить область');
@@ -65,7 +65,7 @@ class RegionController extends Controller
      */
     public function show(Region $region)
     {
-        return $region;
+        return view('admin.regions.show', compact('region'));
     }
 
     /**
@@ -82,7 +82,7 @@ class RegionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Request\RegionUpdateRequest  $request
+     * @param  \App\Http\Request\Region\RegionUpdateRequest  $request
      * @param  \App\Models\Region  $region
      * @return \Illuminate\Http\Response
      */
