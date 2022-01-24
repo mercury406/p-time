@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\View\Components\Admin\Cities\CityTable;
+use App\View\Components\Admin\Regions\RegionTable;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
+        Blade::component('admin-city-table', CityTable::class);
+        Blade::component('admin-regions-table', RegionTable::class);
     }
 }

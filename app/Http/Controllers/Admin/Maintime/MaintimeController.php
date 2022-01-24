@@ -17,7 +17,7 @@ class MaintimeController extends Controller
      */
     public function index()
     {
-        $maintimes = Maintime::orderByDesc('greg_date')->paginate(15);
+        $maintimes = Maintime::orderByDesc('greg_date')->paginate(31);
         return view('admin.maintime.index', compact('maintimes'));
     }
 
@@ -82,9 +82,9 @@ class MaintimeController extends Controller
         ]);
         for($i = 0; $i < count($validated["greg_date"]); $i++){
             $maintime = Maintime::firstOrNew(
-                ["greg_date" => $validated["greg_date"][$i]],
+                ["greg_date" => date_create_from_format('d-m-Y', $validated["greg_date"][$i])],
                 [
-                    "qamar_date" => $validated["qamar_date"][$i], 
+                    "qamar_date" => date_create_from_format('d-m-Y', $validated["qamar_date"][$i]), 
                     "tong" => $validated["tong"][$i], 
                     "quyosh" => $validated["quyosh"][$i], 
                     "peshin" => $validated["peshin"][$i], 
@@ -98,17 +98,6 @@ class MaintimeController extends Controller
         }
 
         return redirect()->route("admin.maintimes.index")->with("success_message", "Добавлено: $created. Обновлено: $updated");       
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Maintime  $maintime
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Maintime $maintime)
-    {
-        //
     }
 
     /**

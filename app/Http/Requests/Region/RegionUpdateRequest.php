@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Request\Region;
+namespace App\Http\Requests\Region;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;

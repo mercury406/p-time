@@ -1,5 +1,5 @@
 @extends('admin.layouts.main')
-@section('title', 'Основное время отсчёта')
+@section('title', "Основное время отсчёта (". $maintimes->count() .")")
 @section('content')
     @php $qamar_months = __("public.months_qamar") @endphp
     <a href="{{ route('admin.maintimes.create') }}" class="btn btn-sm btn-primary mb-1">Добавить/Изменить время отсчёта</a>
@@ -7,7 +7,6 @@
     <table class="table table-hover table-sm table-responsive">
         <thead>
             <tr>
-
                 <th scope="col">Дата</th>
                 <th scope="col">Qamar(Месяц)</th>
                 <th scope="col">Bomdod</th>
@@ -36,7 +35,7 @@
                     <td>{{ $maintime->hufton }}</td>
                     <td>{{ $maintime->updated_at->format('d-m-Y, H:i') }}</td>
                     <td>
-                        <a href="{{route('admin.maintimes.show', $maintime)}}" class="btn btn-sm btn-info">Смотреть</a>
+                        {{-- <a href="{{route('admin.maintimes.show', $maintime)}}" class="btn btn-sm btn-info">Смотреть</a> --}}
                         <a href="{{ route('admin.maintimes.edit', $maintime) }}" class="btn btn-sm btn-warning">Редактировать</a>
                         <form action="{{ route('admin.maintimes.destroy', $maintime) }}" method="post" class="d-inline">
                             @csrf
@@ -47,7 +46,7 @@
                 </tr>
             @empty
                 <p class="my-1">
-                    Ни один город еще не добавлен
+                    Время еще не добавлено
                 </p>
             @endforelse
         </tbody>

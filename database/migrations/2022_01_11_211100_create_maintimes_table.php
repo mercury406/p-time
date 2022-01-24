@@ -15,8 +15,8 @@ class CreateMaintimesTable extends Migration
     {
         Schema::create('maintimes', function (Blueprint $table) {
             $table->id();
-            $table->string('qamar_date', 40);
-            $table->string('greg_date', 40);
+            $table->date('qamar_date');
+            $table->date('greg_date');
             $table->string('tong', 10);
             $table->string('quyosh', 10);
             $table->string('peshin', 10);

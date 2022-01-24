@@ -18,8 +18,7 @@ class CityController extends Controller
      */
     public function index()
     {
-        $cities = City::orderByDesc("created_at")->with('region')->paginate(20);
-        return view("admin.cities.index", compact("cities"));
+        return view("admin.cities.index");
     }
 
     /**
@@ -71,7 +70,7 @@ class CityController extends Controller
      */
     public function show(City $city)
     {
-        return $city;
+        return view('admin.cities.show', compact('city'));
     }
 
     /**
@@ -82,7 +81,7 @@ class CityController extends Controller
      */
     public function edit(City $city)
     {
-        $regions = Region::orderByDesc("created_at")->get();
+        $regions = Region::with('cities')->orderByDesc("created_at")->get();
         return view("admin.cities.edit", compact("regions", "city"));
     }
 

@@ -21,5 +21,10 @@ class City extends Model
         return $this->belongsTo(Region::class);
     }
 
+    public function generated_times()
+    {
+        return $this->hasMany(GeneratedTime::class);
+    }
+
 
 }

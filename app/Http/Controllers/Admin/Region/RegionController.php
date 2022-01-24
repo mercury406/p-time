@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Admin\Region;
 use App\Models\Region;
 use App\Http\Controllers\Controller;
 use App\Http\Services\SlugGenerator;
-use App\Http\Request\Region\RegionStoreRequest;
-use App\Http\Request\Region\RegionUpdateRequest;
+use App\Http\Requests\Region\RegionStoreRequest;
+use App\Http\Requests\Region\RegionUpdateRequest;
+
 
 
 class RegionController extends Controller
@@ -18,8 +19,7 @@ class RegionController extends Controller
      */
     public function index()
     {
-        $regions = Region::orderByDesc('id')->paginate();
-        return view('admin.regions.index', compact("regions"));
+        return view('admin.regions.index');
     }
 
     /**
@@ -82,7 +82,7 @@ class RegionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Request\Region\RegionUpdateRequest  $request
+     * @param  \App\Http\Requests\Region\RegionUpdateRequest  $request
      * @param  \App\Models\Region  $region
      * @return \Illuminate\Http\Response
      */
