@@ -20,6 +20,9 @@ Route::get('shahar/{city:slug}', function (City $city) {
 
 Route::group(["prefix" => "admin", "as" => "admin."], function() {
     Route::get('/', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('index');
+
+    Route::get("/telegramUpdates", [\App\Http\Controllers\Admin\TelegramController::class, "updates"]);
+
     Route::resource('shahars', \App\Http\Controllers\Admin\City\CityController::class)->parameters([
         'shahars' => 'city' 
     ]);
@@ -41,6 +44,9 @@ Route::group(["prefix" => "admin", "as" => "admin."], function() {
 
     Route::resource('maintimes', \App\Http\Controllers\Admin\Maintime\MaintimeController::class)->except(["show"]);
     Route::post('maintimes/generate', [\App\Http\Controllers\Admin\Maintime\MaintimeController::class, "generate"])->name('maintimes.generate');
+
+    Route::get("server", [\App\Http\Controllers\Admin\AdminController::class, 'viewForServer'])->name("viewForServer");
+    Route::post("server", [\App\Http\Controllers\Admin\AdminController::class, 'generatedForServer'])->name("generatedForServer");
 
     // Route::get("update-maintime", function() {
     //     $maintimes = Maintime::all();

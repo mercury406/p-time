@@ -34,6 +34,23 @@
                 </div>
             </div>
         </div>
+
+        <div class="col">
+            <div class="card text-dark bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header">Время</div>
+                <div class="card-body">
+                    <h5 class="card-title">Всего времени: <a href="{{ route("admin.maintimes.index") }}">{{ $maintimes->count() }}</a></h5>
+                    @if ($regions->count() > 0)
+                        <p class="card-text">Последнее:
+                            {{$maintimes->sortByDesc('greg_date')->first()->greg_date}}
+                        </p>    
+                    @endif
+                </div>
+            </div>
+        </div>
+
+
+
     </div>
       
 @endsection

@@ -7,6 +7,8 @@ use App\Models\Maintime;
 use Illuminate\Http\Request;
 use App\Models\GeneratedTime;
 use App\Http\Controllers\Controller;
+use App\Http\Services\TimeDifferenceCalculator;
+use DateTime;
 
 class GeneratedTimesController extends Controller
 {
@@ -20,11 +22,11 @@ class GeneratedTimesController extends Controller
         $times = explode("\r\n", $request->data);
 
         $formatted = [];
-
+        
         foreach($times as $time){
             $exploded = explode("\t", $time);
             $formatted[] = [
-                "date" => date_create_from_format("m/d/Y", $exploded[0]),
+                "date" => DateTime::createFromFormat("m/d/Y", $exploded[0])->format("Y-m-d"),
                 "tong" => $exploded[1],
                 "quyosh" => $exploded[2],
                 "peshin" => $exploded[3],
@@ -33,14 +35,28 @@ class GeneratedTimesController extends Controller
                 "hufton" => $exploded[6],
             ];
         }
-
         $betweenDates = [ 
-            $formatted[0]["date"]->format("Y-m-d"),  // mindate given
-            $formatted[ count($times) - 1 ]["date"]->format("Y-m-d") // maxdate given
+            $formatted[0]["date"],  // mindate given
+            "2100-12-31"
         ];
-
         $maintimes = Maintime::whereBetween("greg_date", $betweenDates)->get();
-        dd($maintimes);
+        
+        $i = 0;
+        foreach($maintimes as $m) {
+            if($m->greg_date >= $formatted[$i > count($formatted) - 1 ? --$i : $i ]["date"]) $i++;
+            $calculated[] = [
+                "greg_date" => $m->greg_date, 
+                "qamar_date" => $m->qamar_date, 
+                "from" => $formatted[$i - 1 > 0 ? $i - 1 : 0]["date"],
+                "tong" => TimeDifferenceCalculator::calculate($m->tong, $formatted[$i - 1]["tong"]),
+                "quyosh" => TimeDifferenceCalculator::calculate($m->quyosh, $formatted[$i - 1]["quyosh"]),
+                "peshin" => TimeDifferenceCalculator::calculate($m->peshin, $formatted[$i - 1]["peshin"]),
+                "asr" => TimeDifferenceCalculator::calculate($m->asr, $formatted[$i - 1]["asr"]),
+                "shom" => TimeDifferenceCalculator::calculate($m->shom, $formatted[$i - 1]["shom"]),
+                "hufton" => TimeDifferenceCalculator::calculate($m->hufton, $formatted[$i - 1]["hufton"]),
+            ];
+        }
+        return view("admin.generated_time.generate", compact('city', 'calculated') );
         
     }
 
@@ -61,9 +77,38 @@ class GeneratedTimesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(City $city, Request $request)
     {
-        //
+        $created = 0;
+        $updated = 0;
+        $validated = $request->validate([
+            "greg_date" => "required",
+            "qamar_date" => "required",
+            "tong" => "required",
+            "quyosh" => "required",
+            "peshin" => "required",
+            "asr" => "required",
+            "shom" => "required",
+            "hufton" => "required"
+        ]);
+        for($i = 0; $i < count($validated["greg_date"]); $i++){
+            $time = GeneratedTime::firstOrNew(
+                ["gregorian_date" => $validated["greg_date"][$i], "city_id" => $city->id],
+                [
+                    "qamar_date" => $validated["qamar_date"][$i], 
+                    "tong" => $validated["tong"][$i], 
+                    "quyosh" => $validated["quyosh"][$i], 
+                    "peshin" => $validated["peshin"][$i], 
+                    "asr" => $validated["asr"][$i], 
+                    "shom" => $validated["shom"][$i], 
+                    "hufton" => $validated["hufton"][$i]
+                ]
+            );
+            $time->id === null ? $created++ : $updated++;
+            $time->save();
+        }
+
+        return redirect()->route("admin.shahars.show", $city)->with("success_message", "Добавлено: $created. Обновлено: $updated");       
     }
 
     /**
@@ -83,9 +128,9 @@ class GeneratedTimesController extends Controller
      * @param  \App\Models\GeneratedTime  $generatedTime
      * @return \Illuminate\Http\Response
      */
-    public function edit(GeneratedTime $generatedTime)
+    public function edit(City $city, GeneratedTime $generatedTime)
     {
-        //
+        return view("admin.generated_time.edit", ["city" => $city, "time" => $generatedTime]);
     }
 
     /**
@@ -95,19 +140,30 @@ class GeneratedTimesController extends Controller
      * @param  \App\Models\GeneratedTime  $generatedTime
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, GeneratedTime $generatedTime)
+    public function update(Request $request, City $city, GeneratedTime $generatedTime)
     {
-        //
+        $validated = $request->validate([
+            "qamar_date" => "required",
+            "tong" => "required",
+            "quyosh" => "required",
+            "peshin" => "required",
+            "asr" => "required",
+            "shom" => "required",
+            "hufton" => "required"
+        ]);
+        if($generatedTime->update([
+            "qamar_date" => $validated["qamar_date"],
+            "tong" => $validated["tong"],
+            "quyosh" => $validated["quyosh"],
+            "peshin" => $validated["peshin"],
+            "asr" => $validated["asr"],
+            "shom" => $validated["shom"],
+            "hufton" => $validated["hufton"],
+        ])){
+            return redirect()->route("admin.shahars.show", $city)->with("success_message", "Время на " . $generatedTime->gregorian_date . " изменено");
+        };
+        return redirect()->back()->with("danger_message", "Не удалось изменить время");
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\GeneratedTime  $generatedTime
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(GeneratedTime $generatedTime)
-    {
-        //
-    }
 }

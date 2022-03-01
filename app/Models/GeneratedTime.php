@@ -12,6 +12,8 @@ class GeneratedTime extends Model
 
     protected $table = 'generated_time';
 
+    protected $guarded = [];
+
     public function city() {
         return $this->belongsTo(City::class);
     }

@@ -38,13 +38,16 @@
     </table>
 
     <h3>Время ({{ $city->generated_times->count() }})</h3>
-    <a href="{{ route('admin.shahars.time.create', $city) }}" class="btn btn-sm btn-primary">Добавить время</a>
+    <a href="{{ route('admin.shahars.time.create', $city) }}" class="btn btn-sm btn-primary my-2">Добавить время</a>
+    @if ($city->generated_times->count() > 20)
+        {{ $city->generated_times()->paginate(20)->links() }}
+    @endif
     
     <table class="table table-hover table-sm table-responsive">
         <thead>
             <tr>
                 <th scope="col">Дата</th>
-                <th scope="col">Qamar(Месяц)</th>
+                <th scope="col">Qamar</th>
                 <th scope="col">Bomdod</th>
                 <th scope="col">Quyosh</th>
                 <th scope="col">Peshin</th>
@@ -56,25 +59,19 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($city->generated_times as $time)
+            @forelse ($city->generated_times()->paginate(20) as $time)
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ $time->gregorian_date }}</td>
+                    <td>{{ $time->qamar_date }}</td>
+                    <td>{{ $time->tong }}</td>
+                    <td>{{ $time->quyosh }}</td>
+                    <td>{{ $time->peshin }}</td>
+                    <td>{{ $time->asr }}</td>
+                    <td>{{ $time->shom }}</td>
+                    <td>{{ $time->hufton }}</td>
                     <td>{{ $time->created_at->format('d-m-Y')}} ({{$time->updated_at->format('d-m-Y')}})</td>
                     <td>
-                        <a href="{{route('admin.shahars.show', $time)}}" class="btn btn-sm btn-info">Смотреть</a>
-                        <a href="{{route('admin.shahars.edit', $time)}}" class="btn btn-sm btn-warning">Редактировать</a>
-                        <form action="{{route('admin.shahars.destroy', $time)}}" method="post" class="d-inline">
-                            @csrf
-                            @method("DELETE")
-                            <input type="submit" value="Удалить" class="btn btn-sm btn-danger">
-                        </form>
+                        <a href="{{route('admin.shahars.time.edit', [$city, $time])}}" class="btn btn-sm btn-warning">Редактировать</a>
                     </td>
                 </tr>
             @empty

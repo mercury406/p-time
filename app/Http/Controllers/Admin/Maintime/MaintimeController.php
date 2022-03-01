@@ -57,7 +57,7 @@ class MaintimeController extends Controller
 
         }
 
-        return view('admin.maintime.generate', compact('formatted'));
+        return view('admin.maintime.generate', compact('formatted'))->with("success_message", "Количество введенных строк: " . count($formatted));
     }
 
     /**
