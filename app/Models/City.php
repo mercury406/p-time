@@ -15,7 +15,7 @@ class City extends Model
     
     protected $fillable = ['slug', 'title'];
     public $translatable = ['title'];
-
+    
     public function region()
     {
         return $this->belongsTo(Region::class);

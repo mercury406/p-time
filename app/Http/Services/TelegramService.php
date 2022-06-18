@@ -2,91 +2,96 @@
 
 namespace App\Http\Services;
 
+use App\Http\Enums\LanguangeEnum;
+use App\Http\Traits\RemoteRequest;
+use App\Http\Traits\TelegramMethods;
+use App\Models\City;
+use App\Models\Region;
+use App\Models\TelegramUser;
+
 class TelegramService{
-    const TG_BASE_URL = "";
 
-    private $method;
-    private $data;
+    // use RemoteRequest;
+    // use TelegramMethods;
+    
+    // private $method;
+    // private $data;
+
+    // public function getUpdates() {
+    //     $this->method = "getUpdates";
+    //     $this->clearData();
+    //     $response = $this->makeRequest();
+    //     return is_null($response) ? ["error" => "null"] : json_decode($response);
+    // }
+
+    // public function subscribeUser(int $user_id){
+    //     $tg_user = TelegramUser::firstOrNew(["tg_user_id" => $user_id]);
+    //     $tg_user->is_subscribed = 1;
+    //     $is_new_user = !isset($tg_user->id);
+
+    //     $tg_user->save();
+
+    //     if($is_new_user || $tg_user->step == 1) $tg_user->sendGreetings();
+
+    //     return "subsribed $user_id";
+    // }
+
+    // public function unsubscribeUser(int $user_id){
+    //     $tg_user = TelegramUser::firstOrNew(["tg_user_id" => $user_id]);
+    //     $tg_user->is_subscribed = 0;
+    //     $tg_user->step = 1;
+    //     $tg_user->language = null;
+    //     $tg_user->region_id = null;
+    //     $tg_user->city_id = null;
+    //     $tg_user->save();
+    //     return "unsubsribed $user_id";
+    // }
+
+    // public function setLanguage(int $user_id, string $lang, int $message_id)
+    // {
+    //     $tg_user = TelegramUser::firstOrNew(["tg_user_id" => $user_id]);
+    //     $tg_user->step = 2;
+    //     $tg_user->language = $lang;
+    //     $tg_user->save();
+        
+    //     $this->deleteMessage($tg_user->tg_user_id, $message_id);
+
+    //     return $tg_user->sendDistrictList();
+        
+    // }
+
+    // public function setRegion(int $user_id, int $region_id, int $message_id)
+    // {
+    //     $tg_user = TelegramUser::firstOrNew(["tg_user_id" => $user_id]);
+    //     $tg_user->step = 3;
+    //     if( is_null($tg_user->id) ) $tg_user->language = LanguangeEnum::UZBEK;
+    //     $tg_user->region_id = $region_id;
+    //     $tg_user->save();
+
+    //     $this->deleteMessage($tg_user->tg_user_id, $message_id);
 
 
-    public function getUpdates() {
-        $this->method = "getUpdates";
-        $this->clearData();
-        $response = $this->makeRequest();
-        return is_null($response) ? ["error" => "null"] : json_decode($response);
-    }
+    //     return $tg_user->sendCityList(Region::find($region_id)->first());
+    // }
 
-    public function sendGreeting(int $user_id)
-    {
-        $text = [""];
-		$text[] = "Assalomu aleykum! Tilni tanlang";
-		$text[] = "~~~~~~~~~~~~~~~~~~~~~~~~~";
-		$text[] = "Здраствуйте! Выберите язык";
-		$text[] = "~~~~~~~~~~~~~~~~~~~~~~~~~";
-		$text[] = "Hello! Choose language";
+    // public function setCity(int $user_id, int $city_id, int $message_id)
+    // {
+    //     $tg_user = TelegramUser::firstOrNew(["tg_user_id" => $user_id]);
+    //     $city = City::find($city_id) ?? City::first();
+    //     $tg_user->step = 4;
 
-		$this->data = [
-			"chat_id" => $user_id,
-			"text" => implode("\n", $text),
-			"reply_markup" => [
-				// "resize_keyboard" => true,
-				"inline_keyboard" => [
-					[
-						[
-                            "text" => "🇺🇿 O'zbek tili",
-                            "callback_data" => "uzbek"
-                        ],
-						[
-                            "text" => "🇺🇿 Ўзбек тили ",
-                            "callback_data" => "ozbek"
-                        ]
-					], 
-					[
-						[
-                            "text" => "🇷🇺 Русский",
-                            "callback_data" => "russian"
-                        ],
-						[
-                            "text" => "🇬🇧 English",
-                            "callback_data" => "english"
-                        ]
-					],
-				]
-            ]
-        ];
+    //     if( is_null($tg_user->id) ) {
+    //         $tg_user->language = LanguangeEnum::UZBEK;
+    //         $tg_user->region_id = $city->region->id;
+    //     }
 
-        return $this->sendMessage();
-    }
-
-
-    private function sendMessage() {
-        $this->method = "sendMessage";
-        $response = $this->makeRequest();
-        return is_null($response) ? ["error" => "null"] : json_decode($response);
-    }
-
-    private function makeRequest() {
-        $ch = curl_init(self::TG_BASE_URL . $this->method);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-type:application/json"]);
-        if($this->data !== []){
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->data));
-        }
-        $result = curl_exec($ch);
-        if($result) {
-            curl_close($ch);
-            return $result;
-        } else {
-            info(curl_error($ch));
-            curl_close($ch);
-            return null;
-        }
-    }
-
-    private function clearData(){
-        $this->data = [];
-    }
+    //     $tg_user->city_id = $city->id;
+        
+    //     $tg_user->save();
+     
+    //     $this->deleteMessage($tg_user->tg_user_id, $message_id);
+        
+    // }
 
     
 }

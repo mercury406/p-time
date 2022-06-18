@@ -17,8 +17,6 @@ class CreateTelegramUsersTable extends Migration
     {
         Schema::create('telegram_users', function (Blueprint $table) {
             $table->id();
-            $table->double("last_update_id");
-            $table->double("last_message_id");
             $table->double("tg_user_id");
             $table->tinyInteger("step")->default(1);
             $table->foreignIdFor(Region::class)->nullable();

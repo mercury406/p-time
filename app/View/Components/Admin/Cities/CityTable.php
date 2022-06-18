@@ -24,7 +24,7 @@ class CityTable extends Component
      */
     public function render()
     {
-        $cities = City::orderByDesc("created_at")->with('region')->paginate(20);
+        $cities = City::orderByDesc("id")->with('region')->paginate(20);
         return view('components.admin.cities.city-table', compact('cities'));
     }
 }
