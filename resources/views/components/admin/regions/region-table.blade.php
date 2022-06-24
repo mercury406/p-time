@@ -14,7 +14,7 @@
                 <td scope="row">{{ $region->id }}</td>
                 <td>{{ $region->getTranslation('title', 'uz') }} ({{$region->cities->count()}})</td>
                 <td><a
-                        href="{{ route('viloyats.show', $region) }}">{{ route('viloyats.show', $region) }}</a>
+                        href="{{ route('viloyat.cities', $region) }}">{{ route('viloyat.cities', $region) }}</a>
                 </td>
                 <td>{{ $region->created_at->format("d-m-Y") ?? ""}} ({{ $region->updated_at->format("d-m-Y") ?? "" }})</td>
                 <td>

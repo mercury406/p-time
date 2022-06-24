@@ -17,4 +17,9 @@ class GeneratedTime extends Model
     public function city() {
         return $this->belongsTo(City::class);
     }
+
+    protected $casts = [
+        "gregorian_date" => "date:Y-m-d",
+        "qamar_date" => "date:Y-m-d",
+    ];
 }

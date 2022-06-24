@@ -80,7 +80,9 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'uz',
+
+    'locales' => ['en', 'ru', 'oz', 'uz'],
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +95,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'uz',
 
     /*
     |--------------------------------------------------------------------------
@@ -176,6 +178,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+
+        // User
+        App\Services\Localization\LocalizationServiceProvider::class,
+
         
 
     ],

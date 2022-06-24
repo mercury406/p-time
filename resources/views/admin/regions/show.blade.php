@@ -4,7 +4,7 @@
 
     <div class="row">
         <div class="col-12">
-            <a href="{{ route('viloyats.show', $region) }}">{{ route('viloyats.show', $region) }}</a>
+            <a href="{{ route('viloyat.cities', $region) }}">{{ route('viloyat.cities', $region) }}</a>
         </div>
     </div>
 
@@ -55,7 +55,7 @@
                 <tr>
                     <td scope="row">{{$city->id}}</td>
                     <td>{{$city->translate('title', 'ru')}}</td>
-                    <td><a href="{{ route('shahars.show', $city) }}">{{ route('shahars.show', $city) }}</a></td>
+                    <td><a href="{{ route('shahar.time', $city) }}">{{ route('shahar.time', $city) }}</a></td>
                     <td>{{ $city->created_at->format('d-m-Y')}} ({{$city->updated_at->format('d-m-Y')}})</td>
                     <td>
                         <a href="{{route('admin.shahars.show', $city)}}" class="btn btn-sm btn-info">Смотреть</a>

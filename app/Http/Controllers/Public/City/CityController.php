@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers\Public\City;
 
-use App\Http\Controllers\Controller;
+use Mobile_Detect;
 use App\Models\City;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Ramazon;
 
 class CityController extends Controller
 {
+    private Mobile_Detect $detect;
+    public function __construct(Mobile_Detect $detect)
+    {
+        $this->detect = $detect;   
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,28 +22,10 @@ class CityController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        $ramazon = Ramazon::first();
+        return $this->detect->isMobile()
+                ? view("mobile", compact('ramazon'))
+                : view("index", compact('ramazon'));
     }
 
     /**
@@ -47,40 +36,11 @@ class CityController extends Controller
      */
     public function show(City $city)
     {
-        //
+        $ramazon = Ramazon::first();
+        session()->put("city", $city);
+        return $this->detect->isMobile()
+                ? view("mobile", compact('ramazon'))
+                : view("index", compact('ramazon'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(City $city)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, City $city)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\City  $city
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(City $city)
-    {
-        //
-    }
 }

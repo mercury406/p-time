@@ -15,7 +15,7 @@
                 <td scope="row">{{$city->id}}</td>
                 <td>{{$city->translate('title', 'uz')}} (<a href="{{route('admin.viloyats.show', $city->region)}}">{{$city->region->translate('title', 'uz')}}</a>)</td>
                 <td>{{ $city->generated_times->count() }}</td>
-                <td><a href="{{ route('shahars.show', $city) }}">{{ route('shahars.show', $city) }}</a></td>
+                <td><a href="{{ route('shahar.time', $city) }}">{{ route('shahar.time', $city) }}</a></td>
                 <td>{{ $city->created_at->format('d-m-Y')}} ({{$city->updated_at->format('d-m-Y')}})</td>
                 <td>
                     <a href="{{route('admin.shahars.show', $city)}}" class="btn btn-sm btn-info">Смотреть</a>

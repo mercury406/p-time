@@ -4,7 +4,7 @@
 
     <div class="row">
         <div class="col-12">
-            <a href="{{ route('shahars.show', $city) }}">{{ route('shahars.show', $city) }}</a>
+            <a href="{{ route('shahar.time', $city) }}">{{ route('shahar.time', $city) }}</a>
         </div>
     </div>
 
@@ -61,8 +61,8 @@
         <tbody>
             @forelse ($city->generated_times()->paginate(20) as $time)
                 <tr>
-                    <td>{{ $time->gregorian_date }}</td>
-                    <td>{{ $time->qamar_date }}</td>
+                    <td>{{ $time->gregorian_date->toDateString() }}</td>
+                    <td>{{ $time->qamar_date->toDateString() }}</td>
                     <td>{{ $time->tong }}</td>
                     <td>{{ $time->quyosh }}</td>
                     <td>{{ $time->peshin }}</td>

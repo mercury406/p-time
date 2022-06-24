@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\City;
 
+use Mobile_Detect;
 use App\Models\City;
 use App\Models\Region;
 use App\Http\Controllers\Controller;
@@ -11,6 +12,7 @@ use App\Http\Requests\City\CityUpdateRequest;
 
 class CityController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *

@@ -7,7 +7,7 @@ return [
     "republic" => "Republic",
     "type-city" => "Type city name",
     "close" => "Close",
-    "ramazon-calendar"=> "year's ramadan calendar",
+    "ramazon-calendar"=> "Ramadan calendar",
     "namaz-time" => "prayer time",
     "namaz-times" => "prayer times",
     "yearly-namaz-times" => "yearly prayer times",

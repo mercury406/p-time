@@ -91,6 +91,7 @@ class GeneratedTimesController extends Controller
             "shom" => "required",
             "hufton" => "required"
         ]);
+        dd($validated);
         for($i = 0; $i < count($validated["greg_date"]); $i++){
             $time = GeneratedTime::firstOrNew(
                 ["gregorian_date" => $validated["greg_date"][$i], "city_id" => $city->id],

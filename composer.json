@@ -12,6 +12,7 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "mobiledetect/mobiledetectlib": "^2.8",
         "spatie/laravel-translatable": "^5.1"
     },
     "require-dev": {
